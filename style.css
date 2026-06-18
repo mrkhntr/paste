@@ -1,12 +1,27 @@
 :root {
-  --bg: #0b0c10;
-  --panel: #15171e;
-  --panel-2: #1c1f28;
-  --border: #2a2e3a;
-  --text: #e6e8ee;
-  --muted: #9aa0ad;
-  --accent: #4f8cff;
+  color-scheme: light dark;
+  /* Light theme (default — used when the browser prefers light) */
+  --bg: #ffffff;
+  --panel: #f6f7f9;
+  --panel-2: #eceef2;
+  --border: #d8dce3;
+  --text: #1a1c22;
+  --muted: #5c6370;
+  --accent: #2563eb;
   --accent-text: #fff;
+}
+
+@media (prefers-color-scheme: dark) {
+  :root {
+    --bg: #0b0c10;
+    --panel: #15171e;
+    --panel-2: #1c1f28;
+    --border: #2a2e3a;
+    --text: #e6e8ee;
+    --muted: #9aa0ad;
+    --accent: #4f8cff;
+    --accent-text: #fff;
+  }
 }
 
 * { box-sizing: border-box; }

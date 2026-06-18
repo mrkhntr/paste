@@ -1,7 +1,7 @@
 // Safe Paste service worker — offline support.
 // Strategy (from NoPaste): precache local files + third-party libraries,
 // then serve cache-first, falling back to the network and caching the result.
-const VERSION = '2026-06-17-5';
+const VERSION = '2026-06-17-6';
 const CACHE = 'safepaste-' + VERSION;
 
 // Relative paths resolve against this worker's location, so they work when the
@@ -17,6 +17,7 @@ const PRECACHE_URLS = [
   'https://cdn.jsdelivr.net/npm/marked@12.0.2/marked.min.js',
   'https://cdn.jsdelivr.net/npm/dompurify@3.1.6/dist/purify.min.js',
   'https://cdn.jsdelivr.net/npm/@highlightjs/cdn-assets@11.9.0/highlight.min.js',
+  'https://cdn.jsdelivr.net/npm/@highlightjs/cdn-assets@11.9.0/styles/github.min.css',
   'https://cdn.jsdelivr.net/npm/@highlightjs/cdn-assets@11.9.0/styles/github-dark.min.css',
   'https://cdn.jsdelivr.net/npm/easymde@2.18.0/dist/easymde.min.js',
   'https://cdn.jsdelivr.net/npm/easymde@2.18.0/dist/easymde.min.css',

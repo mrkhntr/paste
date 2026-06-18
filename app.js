@@ -342,9 +342,13 @@ function init() {
   $('history-close').addEventListener('click', closeHistory);
   $('history').addEventListener('click', (e) => { if (e.target.id === 'history') closeHistory(); });
 
-  // Ctrl/Cmd+S saves while composing
+  // Ctrl/Cmd+S and Ctrl/Cmd+Enter save while composing
+  easymde.codemirror.setOption('extraKeys', Object.assign({}, easymde.codemirror.getOption('extraKeys'), {
+    'Cmd-Enter': () => { if (!composeEl.hidden) doSave(); },
+    'Ctrl-Enter': () => { if (!composeEl.hidden) doSave(); },
+  }));
   window.addEventListener('keydown', (e) => {
-    if ((e.metaKey || e.ctrlKey) && e.key.toLowerCase() === 's') {
+    if ((e.metaKey || e.ctrlKey) && (e.key.toLowerCase() === 's' || e.key === 'Enter')) {
       e.preventDefault();
       if (!composeEl.hidden) doSave();
     }
