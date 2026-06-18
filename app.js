@@ -158,6 +158,16 @@ function showCompose(draft) {
   easymde.codemirror.focus();
 }
 
+// True when compose is active and the editor differs from the last save/load.
+function isDirty() {
+  return !composeEl.hidden && easymde.value() !== baselineText;
+}
+
+// Confirm leaving unsaved content. Returns true if it's safe to proceed.
+function confirmDiscard() {
+  return !isDirty() || confirm('You have unsaved content. Discard it and leave?');
+}
+
 function showView(text, format) {
   current = { text, format };
   renderInto(articleEl, text, format);
@@ -219,6 +229,7 @@ function doSave() {
 }
 
 function doNew() {
+  if (!confirmDiscard()) return;
   clearDraft();
   history.replaceState(null, '', location.pathname + location.search);
   showCompose({ text: '', format: 'markdown' });
@@ -357,15 +368,24 @@ function init() {
     }
   });
 
-  // Warn before leaving with unsaved compose content (differs from last save/load).
+  // Warn before closing/reloading the tab with unsaved compose content.
   window.addEventListener('beforeunload', (e) => {
-    if (!composeEl.hidden && easymde.value() !== baselineText) {
+    if (isDirty()) {
       e.preventDefault();
       e.returnValue = ''; // required for Chrome to show the native prompt
     }
   });
 
-  window.addEventListener('hashchange', route);
+  // Guard in-app navigation (history open, back/forward, manual hash edits):
+  // confirm before discarding unsaved content; on cancel, restore the URL
+  // (replaceState does not re-fire hashchange, so the editor is left untouched).
+  window.addEventListener('hashchange', (e) => {
+    if (isDirty() && !confirm('You have unsaved content. Discard it and leave?')) {
+      history.replaceState(null, '', e.oldURL);
+      return;
+    }
+    route();
+  });
   route();
 
   if ('serviceWorker' in navigator) {

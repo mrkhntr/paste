@@ -1,7 +1,7 @@
 // Safe Paste service worker — offline support.
 // Strategy (from NoPaste): precache local files + third-party libraries,
 // then serve cache-first, falling back to the network and caching the result.
-const VERSION = '2026-06-17-7';
+const VERSION = '2026-06-17-8';
 const CACHE = 'safepaste-' + VERSION;
 
 // Relative paths resolve against this worker's location, so they work when the
