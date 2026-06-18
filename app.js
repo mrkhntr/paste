@@ -34,6 +34,24 @@ function renderMarkdown(text) {
   return DOMPurify.sanitize(marked.parse(text, { breaks: false, gfm: true }));
 }
 
+// Guess whether raw text is markdown or plain by looking for common markdown
+// syntax. Used for #raw= ingestion when no explicit &format= is given.
+const MD_SIGNALS = [
+  /^#{1,6}\s+\S/m,            // heading
+  /^\s*[-*+]\s+\S/m,         // unordered list
+  /^\s*\d+\.\s+\S/m,         // ordered list
+  /^\s*>\s+\S/m,             // blockquote
+  /```|~~~/,                  // code fence
+  /!?\[[^\]]+\]\([^)]+\)/,   // link or image
+  /\*\*[^*\n]+\*\*/,         // bold **
+  /__[^_\n]+__/,             // bold __
+  /`[^`\n]+`/,               // inline code
+  /^\|.+\|/m,                // table row
+];
+function detectFormat(text) {
+  return MD_SIGNALS.some((re) => re.test(text)) ? 'markdown' : 'plain';
+}
+
 // Render `text` into `el` according to `format`. Markdown is sanitized then
 // code blocks are syntax-highlighted; plain text is shown verbatim.
 function renderInto(el, text, format) {
@@ -155,8 +173,10 @@ function route() {
   if (f.startsWith('raw=')) {
     const params = new URLSearchParams(f);
     const text = params.get('raw') || '';
-    const format = params.get('format') === 'plain' ? 'plain' : 'markdown';
+    const explicit = params.get('format');
+    const format = explicit === 'plain' || explicit === 'markdown' ? explicit : detectFormat(text);
     const frag = encode(text, format);
+    addToHistory(frag, text, format); // raw inputs are auto-saved to local history
     history.replaceState(null, '', location.pathname + location.search + '#' + frag);
     showView(text, format);
     return;

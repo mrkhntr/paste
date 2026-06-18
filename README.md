@@ -17,9 +17,10 @@ It's a fork of [NoPaste](https://github.com/bokub/nopaste) (MIT), rebuilt around
   format (`m` = markdown, `t` = plain). The fragment is never sent to a server.
 - **Immutable.** Saving freezes a paste. To change one, open it and **Duplicate** — that
   starts an editable copy that Saves as a brand-new link; the original is untouched.
-- **Pre-fill links.** `…/#raw=some%20text` (optionally `&format=plain`) seeds a paste and
-  redirects to its compressed link. It's a fragment (not `?query` or a path) so the content
-  never reaches the server.
+- **Pre-fill links.** `…/#raw=some%20text` seeds a paste, **auto-detects** markdown vs
+  plain (override with `&format=plain` / `&format=markdown`), **auto-saves** it to local
+  history, and redirects to its compressed link. It's a fragment (not `?query` or a path)
+  so the content never reaches the server.
 
 ## "Safe" means
 
