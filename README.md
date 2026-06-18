@@ -22,6 +22,31 @@ It's a fork of [NoPaste](https://github.com/bokub/nopaste) (MIT), rebuilt around
   history, and redirects to its compressed link. It's a fragment (not `?query` or a path)
   so the content never reaches the server.
 
+## Use it from the Chrome address bar (keyword)
+
+Turn the omnibox into an instant paste box: type a keyword, then your text, and Chrome
+opens a new paste (format auto-detected, auto-saved to history).
+
+**Manual setup (one time):**
+
+1. Chrome → **Settings → Search engines → Manage search engines and site search**
+   (or visit `chrome://settings/searchEngines`).
+2. Under **Site search**, click **Add**.
+3. Fill in:
+   - **Search engine:** `Safe Paste`
+   - **Shortcut:** `paste` (or anything short, e.g. `sp`)
+   - **URL with %s in place of query:** `https://mrkhntr.com/paste/#raw=%s`
+4. Save. Now type `paste` + <kbd>Tab</kbd> + your text in the address bar → it creates a paste.
+
+The text goes in the URL **fragment** (`#raw=`), so it's never sent to a server — and Edge,
+Brave, and other Chromium browsers use the same Site search settings.
+
+**Semi-automatic:** Safe Paste ships an [OpenSearch](opensearch.xml) descriptor, so after you
+visit the site Chrome auto-adds it under *Site search* (look for it in the list and give it a
+shortcut). There is **no true one-click "add keyword" prompt** for a website — Chrome removed
+that API. The only way to get genuine one-click keyword install is a small **Chrome extension**
+(which can own an omnibox keyword); that's intentionally not part of this static app.
+
 ## "Safe" means
 
 Serverless / private-by-staying-in-the-link — **not encrypted**. Anyone with a link can

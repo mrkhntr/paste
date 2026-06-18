@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<OpenSearchDescription xmlns="http://a9.com/-/spec/opensearch/1.1/">
+  <ShortName>Safe Paste</ShortName>
+  <Description>Create a serverless paste from your browser's address bar</Description>
+  <InputEncoding>UTF-8</InputEncoding>
+  <Image width="16" height="16" type="image/svg+xml">data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' rx='12' fill='%234f8cff'/%3E%3Ctext x='50%25' y='54%25' font-size='38' text-anchor='middle' dominant-baseline='middle' font-family='system-ui' fill='white'%3E%E2%9C%82%3C/text%3E%3C/svg%3E</Image>
+  <Url type="text/html" method="get" template="https://mrkhntr.com/paste/#raw={searchTerms}"/>
+</OpenSearchDescription>
