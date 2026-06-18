@@ -246,14 +246,20 @@ function doDuplicate() {
   showCompose({ text: current.text, format: current.format });
 }
 
-function doShare() {
-  const url = location.href;
+function copyText(text, okMsg, failMsg) {
   if (navigator.clipboard && navigator.clipboard.writeText) {
-    navigator.clipboard.writeText(url).then(() => toast('Link copied to clipboard.'),
-      () => toast('Copy failed — select the address bar instead.'));
+    navigator.clipboard.writeText(text).then(() => toast(okMsg), () => toast(failMsg));
   } else {
-    toast('Clipboard unavailable — copy the URL from the address bar.');
+    toast(failMsg);
   }
+}
+
+function doShare() {
+  copyText(location.href, 'Link copied to clipboard.', 'Copy failed — select the address bar instead.');
+}
+
+function doCopyContent() {
+  copyText(current.text, 'Content copied to clipboard.', 'Copy failed — select the text instead.');
 }
 
 function doDownload() {
@@ -335,13 +341,19 @@ function init() {
   easymde = new EasyMDE({
     element: $('editor'),
     autofocus: false,
-    spellChecker: false,
+    spellChecker: false,       // use the browser's native spell-checker instead (below)
     status: false,
     toolbar: false,            // we provide our own toolbar
     minHeight: '200px',
     placeholder: 'Paste or write here…',
     previewRender: renderMarkdown, // used if EasyMDE preview is ever invoked
+    inputStyle: 'contenteditable', // required for native spellcheck squiggles to show
+    nativeSpellcheck: true,
   });
+  // Enable the browser's native spell-check (respects the user's OS language).
+  easymde.codemirror.setOption('spellcheck', true);
+  easymde.codemirror.setOption('autocorrect', true);
+  easymde.codemirror.refresh();
   easymde.codemirror.on('change', onComposeInput);
 
   formatToggle.addEventListener('click', (e) => {
@@ -363,6 +375,7 @@ function init() {
   $('btn-new-2').addEventListener('click', doNew);
   $('btn-duplicate').addEventListener('click', doDuplicate);
   $('btn-share').addEventListener('click', doShare);
+  $('btn-copy').addEventListener('click', doCopyContent);
   $('btn-download').addEventListener('click', doDownload);
   $('btn-history').addEventListener('click', openHistory);
   $('btn-history-2').addEventListener('click', openHistory);
