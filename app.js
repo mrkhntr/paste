@@ -118,6 +118,7 @@ const formatToggle = $('format-toggle');
 
 let easymde = null;
 let current = { text: '', format: 'markdown' }; // last viewed paste, for Duplicate/Share/Download
+let baselineText = ''; // editor content as of the last save/load; used to detect unsaved changes
 
 // ---------- format toggle ----------
 
@@ -149,6 +150,7 @@ function onComposeInput() {
 function showCompose(draft) {
   setFormat(draft.format);
   easymde.value(draft.text);
+  baselineText = draft.text;
   renderInto(previewEl, draft.text, draft.format);
   viewEl.hidden = true;
   composeEl.hidden = false;
@@ -205,6 +207,7 @@ function doSave() {
   const format = currentFormat();
   const frag = encode(text, format);
   addToHistory(frag, text, format);
+  baselineText = text; // saved, so no longer "unsaved"
   clearDraft();
   history.replaceState(null, '', location.pathname + location.search + '#' + frag);
   showView(text, format);
@@ -351,6 +354,14 @@ function init() {
     if ((e.metaKey || e.ctrlKey) && (e.key.toLowerCase() === 's' || e.key === 'Enter')) {
       e.preventDefault();
       if (!composeEl.hidden) doSave();
+    }
+  });
+
+  // Warn before leaving with unsaved compose content (differs from last save/load).
+  window.addEventListener('beforeunload', (e) => {
+    if (!composeEl.hidden && easymde.value() !== baselineText) {
+      e.preventDefault();
+      e.returnValue = ''; // required for Chrome to show the native prompt
     }
   });
 
