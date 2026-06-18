@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="theme-color" content="#0b0c10">
+  <title>Safe Paste</title>
+  <link rel="manifest" href="./manifest.json">
+  <link rel="icon" href="data:,">
+
+  <!-- Third-party libraries (cached for offline by sw.js) -->
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/easymde@2.18.0/dist/easymde.min.css">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@highlightjs/cdn-assets@11.9.0/styles/github-dark.min.css">
+  <link rel="stylesheet" href="./style.css">
+</head>
+<body>
+  <!-- ===== Compose mode ===== -->
+  <section id="compose">
+    <div class="toolbar">
+      <div class="seg" id="format-toggle" role="tablist" aria-label="Format">
+        <button type="button" data-format="markdown" class="active" role="tab">Markdown</button>
+        <button type="button" data-format="plain" role="tab">Plain</button>
+      </div>
+      <span class="spacer"></span>
+      <button type="button" id="btn-new" class="ghost">New</button>
+      <button type="button" id="btn-history" class="ghost">History</button>
+      <button type="button" id="btn-save" class="primary">Save</button>
+    </div>
+    <div class="split" id="split">
+      <div class="pane pane-edit">
+        <textarea id="editor" placeholder="Paste or write here…"></textarea>
+      </div>
+      <div class="pane pane-preview">
+        <div id="preview" class="rendered"></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ===== View mode (read-only) ===== -->
+  <section id="view" hidden>
+    <div class="toolbar">
+      <button type="button" id="btn-new-2" class="ghost">New</button>
+      <button type="button" id="btn-duplicate" class="ghost">Duplicate</button>
+      <span class="spacer"></span>
+      <span id="view-format" class="badge"></span>
+      <button type="button" id="btn-history-2" class="ghost">History</button>
+      <button type="button" id="btn-download" class="ghost">Download</button>
+      <button type="button" id="btn-share" class="primary">Share</button>
+    </div>
+    <article id="article" class="rendered"></article>
+  </section>
+
+  <!-- ===== History panel ===== -->
+  <div id="history" class="overlay" hidden>
+    <div class="panel">
+      <header>
+        <strong>Local history</strong>
+        <button type="button" id="history-close" class="ghost" aria-label="Close">×</button>
+      </header>
+      <p class="muted small">Saved only in this browser. Clearing site data removes the list (not the pastes — their links still work).</p>
+      <ul id="history-list"></ul>
+      <p id="history-empty" class="muted">No saved pastes yet.</p>
+    </div>
+  </div>
+
+  <div id="toast" class="toast" hidden></div>
+
+  <!-- Libraries -->
+  <script src="https://cdn.jsdelivr.net/npm/lz-string@1.5.0/libs/lz-string.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/marked@12.0.2/marked.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/dompurify@3.1.6/dist/purify.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/@highlightjs/cdn-assets@11.9.0/highlight.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/easymde@2.18.0/dist/easymde.min.js"></script>
+  <script src="./app.js"></script>
+</body>
+</html>

@@ -1,0 +1,13 @@
+Safe Paste
+==========
+
+A fork of NoPaste (https://github.com/bokub/nopaste) by Boris K, which is based
+on topaz/paste (https://github.com/topaz/paste). Licensed under MIT (see LICENSE).
+
+Third-party libraries (loaded from jsDelivr, cached for offline by the service
+worker):
+  - lz-string      (MIT)  — URL-safe compression
+  - EasyMDE         (MIT)  — markdown editor
+  - marked          (MIT)  — markdown rendering
+  - DOMPurify       (Apache-2.0 / MPL-2.0) — HTML sanitization
+  - highlight.js    (BSD-3-Clause) — code syntax highlighting
