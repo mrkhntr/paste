@@ -1,0 +1,12 @@
+{
+  "name": "safe-paste",
+  "version": "1.0.0",
+  "private": true,
+  "description": "Serverless, immutable markdown paste tool — content lives entirely in the URL.",
+  "scripts": {
+    "screenshots": "node test/screenshots.js"
+  },
+  "devDependencies": {
+    "puppeteer": "^23.0.0"
+  }
+}

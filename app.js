@@ -130,6 +130,10 @@ function setFormat(format) {
     b.classList.toggle('active', b.dataset.format === format);
   });
   splitEl.classList.toggle('plain', format === 'plain'); // hide preview pane for plain
+  if (format === 'plain') splitEl.classList.remove('show-preview'); // plain has no preview
+  const btnPreview = $('btn-preview');
+  btnPreview.classList.toggle('hide', format === 'plain');
+  if (format === 'plain') btnPreview.textContent = 'Preview';
 }
 
 // ---------- compose input (debounced) ----------
@@ -151,6 +155,8 @@ function showCompose(draft) {
   setFormat(draft.format);
   easymde.value(draft.text);
   baselineText = draft.text;
+  splitEl.classList.remove('show-preview'); // start on the editor (mobile toggle)
+  $('btn-preview').textContent = 'Preview';
   renderInto(previewEl, draft.text, draft.format);
   viewEl.hidden = true;
   composeEl.hidden = false;
@@ -343,6 +349,13 @@ function init() {
     if (!btn) return;
     setFormat(btn.dataset.format);
     onComposeInput();
+  });
+
+  // Mobile-only Edit/Preview toggle (the panes are side-by-side on wide screens).
+  $('btn-preview').addEventListener('click', () => {
+    const showing = splitEl.classList.toggle('show-preview');
+    $('btn-preview').textContent = showing ? 'Edit' : 'Preview';
+    if (showing) renderInto(previewEl, easymde.value(), currentFormat()); // ensure fresh
   });
 
   $('btn-save').addEventListener('click', doSave);
