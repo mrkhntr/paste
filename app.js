@@ -179,6 +179,7 @@ function route() {
     addToHistory(frag, text, format); // raw inputs are auto-saved to local history
     history.replaceState(null, '', location.pathname + location.search + '#' + frag);
     showView(text, format);
+    toast('Saved to your local history (' + format + ').');
     return;
   }
 
@@ -353,7 +354,20 @@ function init() {
   route();
 
   if ('serviceWorker' in navigator) {
-    navigator.serviceWorker.register('./sw.js').catch(() => { /* offline support is best-effort */ });
+    // When a newly-installed worker takes control, reload once so the page runs
+    // the latest code. Guarded so first-time visitors (no controller yet) and
+    // repeat reloads don't loop.
+    let refreshing = false;
+    if (navigator.serviceWorker.controller) {
+      navigator.serviceWorker.addEventListener('controllerchange', () => {
+        if (refreshing) return;
+        refreshing = true;
+        location.reload();
+      });
+    }
+    navigator.serviceWorker.register('./sw.js').then((reg) => {
+      reg.update(); // proactively check for a new version on every load
+    }).catch(() => { /* offline support is best-effort */ });
   }
 }
 
